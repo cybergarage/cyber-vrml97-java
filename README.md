@@ -1,4 +1,4 @@
-# CyberX3D for Java
+# CyberVRML for Java
 
 User's Guide
 
