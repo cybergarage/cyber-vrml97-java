@@ -1,27 +1,15 @@
-> ![](Pictures/10000000000000FA000001086CC247F4.jpg){width="6.439cm"
-> height="6.801cm"}
-
-CyberVRML97 for Java
+# CyberVRML97 for Java
 
 > User's Guide
 
-Document Revision History
-
-  ---------------- ----------------------------------------------------------
-  Modified         Description
-  June 19, 2002    Added a description of new constructor of VRML97Loader.
-  April 5, 2002    Added a description of PROTO option for loading.
-  March 3, 2002    This was the first release of the User's Guide.
-  ---------------- ----------------------------------------------------------
-
-# []{#anchor}1.Introduction 
+## 1.Introduction 
 
 CyberVRML97 for Java is a development package for VRML97/2.0 and Java3D
 programmers. Using the package, you can easily read and write the VRML
 files, set and get the scene graph information, draw the geometries, run
 the behaviors easily.
 
-# []{#anchor-1}2.Setup 
+## 2.Setup 
 
 To use the package, copy the package into your JDK and JRE library
 directory. For example,
@@ -34,7 +22,7 @@ For example,
 
 set CLASSPATH=.¥;c:¥src¥java¥cv97r???.jar
 
-# []{#anchor-2}Scene Graph 
+###Scene Graph 
 
 In the CyberVRML97, the scene graph is correction and hierarchical
 arrangement of VRML nodes.
@@ -43,7 +31,7 @@ There are two ways to build a scene graph dynamically, you can load it
 from a VRML file, or you can create new VRML node and add the node into
 the scene graph.
 
-## []{#anchor-3}Loading Scene Graph 
+### Loading Scene Graph 
 
 Use SceneGraph::load() to load a scene graph from a VRML file. The
 load() clears all VRML nodes in the current scene graph.
@@ -54,7 +42,7 @@ If your scene graph has some VRML nodes and you want to add a new scene
 graph from a VRML file into the current scene graph, use
 SceneGraph::add().
 
-> SceneGraph sg = new SceneGraph(); \...\...\....
+> SceneGraph sg = new SceneGraph(); ....
 
 sg.add(\"world.wrl\");
 
@@ -66,7 +54,7 @@ loading. For example,
 SceneGraph sg = new SceneGraph();
 sg.setOption(SceneGraph.USE_PREPROCESSOR); sg.load(\"world.wrl\");
 
-## []{#anchor-4}Building Scene Graph 
+### Building Scene Graph 
 
 The CyberVRML97 has all C++ classes of VRML nodes, you can add and
 remove the all nodes dynamically. Use SceneGraph::addNode() to add a new
@@ -108,7 +96,7 @@ PointLightNode plight = sg.findPointLightNode(); if (plight != null)
 
 plight.remove();
 
-## []{#anchor-5}Scene Graph Output 
+### Scene Graph Output 
 
 Use SceneGraph::save() to save a current scene graph into a VRML file.
 
@@ -119,7 +107,7 @@ console.
 
 sceneGraph.print();
 
-## []{#anchor-6}Scene Graph Traversal 
+### Scene Graph Traversal 
 
 The scene graph has the VRML information as a collection of Node class
 instances. The Node class is a super class of all VRML node classes of
@@ -136,7 +124,7 @@ void GetViewpointInfomation(Node node)
 if (node.isViewpointNode()) {
 
 ViewpointNode view = (Viewpoint)node; // Get a viewpoint information
-\...\...\....
+....
 
 }
 
@@ -149,12 +137,12 @@ void main()
 
 {
 
-\...\...\....
+....
 
 SceneGraph sg = new SceneGraph(); sceneGraph.load(\"world.wrl\");
 
 for (Node node=sg.getNodes(); node; node=node.next())
-GetViewpointInfomation(node); \...\...\....
+GetViewpointInfomation(node); ....
 
 }
 
@@ -176,20 +164,20 @@ void main()
 
 {
 
-\...\...\....
+....
 
 SceneGraph sg = new SceneGraph(); sg.load(\"world.wrl\"); for (Node
 node=sg.getNodes(); node; node=node.nextTraversal()) if
 (node.isViewpoint()) {
 
 ViewpointNode view = (ViewpointNode)node; // Get a viewpoint information
-\...\...\....
+....
 
 }
 
 }
 
-\...\...\....
+....
 
 }
 
@@ -210,11 +198,11 @@ graph \.....
 SceneGraph sg = new SceneGraph(); sg.load(\"world.wrl\"); for
 (ViewpointNode view=sg.findViewpointNode(); view;
 view=(ViewpointNode)view.nextTraversalSameType())) { // Get a viewpoint
-information \...\...\....
+information ....
 
 }
 
-## []{#anchor-7}Finding Node 
+### Finding Node 
 
 Use SceneGraph::findNode() to find a named node by DEF keyword or
 Node::setName(). The following example loads a VRML file, "world.wrl",
@@ -233,13 +221,13 @@ SceneGraph sg; sg.load("world.wrl")
 
 ViewpointNode defaultView = sg.getViewpointNodes();
 
-# []{#anchor-8}Node 
+## Node 
 
 The CyberVRML97 node name is identical to the VRML node name. For
 example, you would use the BoxNode class if you want to use the Box
 node.
 
-## []{#anchor-9}Creating Node 
+### Creating Node 
 
 The node class has the default constructor only. Use the default
 constructor to create the new node, and set the field property. The
@@ -247,7 +235,7 @@ following example creates a sphere and set the property.
 
 SphereNode spNode = new SphereNode(); spNode.setRadius(10.0);
 
-## []{#anchor-10}Node Type 
+### Node Type 
 
 If you want to know the node type, use Node::getType() or
 Node::is\<nodetype\>Node();
@@ -267,7 +255,7 @@ System.out.println("This node is ViewpointNode !!");
 
 }
 
-## []{#anchor-11}Node Name 
+### Node Name 
 
 If you load a VRML file that has some named nodes by DEF keyword, you
 can get the name using Node::getName(); Use Node::setName() to name a
@@ -280,11 +268,11 @@ ShapeNode mtNode = sg.getShapeNodes(); mtNode.setName("MtFuji");
 The named nodes are output using DEF keyword when you save the scene
 graph.
 
-#VRML V2.0 utf8 \...\...\.... DEF MtFuji Shape { \...\...\....
+#VRML V2.0 utf8 .... DEF MtFuji Shape { ....
 
 }
 
-\...\...\....
+....
 
 ## []{#anchor-12}Accessing Fields 
 
@@ -319,7 +307,7 @@ n\<colCnt; n++)
 
 colField.set1Value(n, 0xff, 0x00, 0x00) // Red
 
-## []{#anchor-13}Adding to Scene Graph 
+### Adding to Scene Graph 
 
 Use SceneGraph::addNode() to add the node as a root node of the scene
 graph. The following example creates a transform node add the node to
@@ -329,7 +317,7 @@ SceneGraph sg;
 
 TransformNode transNode = new TransformNode(); sg.addNode(transNode);
 
-## []{#anchor-14}Adding Child Node 
+### Adding Child Node 
 
 Use Node::addChildNode() to add the node as a child node of the other
 node. The following example creates a shape and a box, add the shape to
@@ -342,7 +330,7 @@ sg.addNode(shapeNode);
 
 shapeNode.addChileNode(boxNode);
 
-## []{#anchor-15}Getting Child Node 
+### Getting Child Node 
 
 There are two ways to get child nodes. The first way is to use
 Node::getNChildNodes() that returns a count of child nodes, and
@@ -382,19 +370,19 @@ childNode = childNode.next();
 
 } }
 
-## []{#anchor-16}Removing from SceneGraph or Parent Node. 
+### Removing from SceneGraph or Parent Node. 
 
 Use Node::remove() to remove a node from the scene graph root or the
 parent node. The following example removes a point light from the scene
 graph.
 
-SceneGraph sg; \...\...\....
+SceneGraph sg; ....
 
 PointLightNode plight = sg.findPointLightNode(); if (plight != null)
 
 plight.remove();
 
-## []{#anchor-17}Instance Node 
+### Instance Node 
 
 You can create an instance of a node like USE keyword of VRML97. Use
 Node::createInstanceNode() to create the instance node.
@@ -419,7 +407,7 @@ DEF BOX Shape { geometry Box { size 10 20 30
 
 USE BOX
 
-# []{#anchor-18}Field 
+## Field 
 
 The node has several fields and the field is a property or attribute of
 a node. The field is identical to the VRML field name. For example, you
@@ -437,18 +425,18 @@ n\<colCnt; n++)
 
 colField.set1Value(n, 0xff, 0x00, 0x00) // Red
 
-# []{#anchor-19}File Formats 
+## File Formats 
 
 The CyberVRML97 can import the following geometry file formats. Use
 SceneGraph::load() to import the geometry files. The CyberVRML97
 converts from the imported information into VRML97 nodes add the nodes
 into the scene graph when the file format is not VRML2.0/97.
 
-## []{#anchor-20}VRML2.0/97 (\*.wrl) 
+### VRML2.0/97 (*.wrl) 
 
 The CyberVRML97 can import all information in a VRML2.0/97 file.
 
-## []{#anchor-21}Autodesk 3DS (\*.3ds) 
+### Autodesk 3DS (*.3ds) 
 
 The CyberVRML97 imports only the following information from a 3DS file,
 and ignore the other information.
@@ -464,12 +452,12 @@ and ignore the other information.
   0x4120      Triangle Fase Set
   ----------- --------------------------
 
-## []{#anchor-22}Autodesk DXF (\*dxf) 
+### Autodesk DXF (*dxf) 
 
 The CyberVRML97 imports only the polylines and face3Ds information from
 a DXF file.
 
-## []{#anchor-23}Wavefront OBJ (\*.obj) 
+### Wavefront OBJ (*.obj) 
 
 The CyberVRML97 imports only the following information from the
 specified OBJ file, and ignore the other information. The CyberVRML97
@@ -482,25 +470,25 @@ doesn't read the map files and the material files.
   f           Face Index
   ----------- ------------------
 
-## []{#anchor-24}SENSE8 NFF (\*.nff) 
+### SENSE8 NFF (*.nff) 
 
 The CyberVRML97 imports only the vertex positions and the polygon
 indices with the color from the specified NFF file, and ignore the other
 information.
 
-## []{#anchor-25}STL (\*stl) 
+### STL (*stl) 
 
 The CyberVRML97 supports the ASCII format.
 
-### X3D (\*x3d / \*.xml) 
+### X3D (*x3d / *.xml) 
 
 The CyberVRML97 supports Don Brutzman\'s draft XML tagsets. The
 CyberVRML97 can import all tag information without the EXTERNPROTO and
 PROTO defines in the specified X3D file.
 
-# []{#anchor-26}Java3D 
+## Java3D 
 
-## []{#anchor-27}Rendering / Behavior 
+### Rendering / Behavior 
 
 The CyberVRML97 can draw shape nodes with the behaviors automatically
 with Java3D. Using the feature, you can create your original
@@ -511,42 +499,68 @@ Canvas3D, and set the instance to the scene graph. For example,
 
 public class ViewerJ3D extends Frame implements Constants { private
 Scene Graph sg; private SceneGraphJ3dObject sgObject; public
-ViewerJ3D(){ super(\"VRML Simple Viewer\"); \...\...\...\...\...\.....
+ViewerJ3D(){ super(\"VRML Simple Viewer\"); ....
 sg = new SceneGraph(SceneGraph.NORMAL_GENERATION); setLayout(new
 BorderLayout()); Canvas3D c = new Canvas3D(null); add(\"Center\", c);
 sgObject = new SceneGraphJ3dObject(c, sg); sg.setObject(sgObject);
-\...\...\...\...\...\.....
+....
 
 setSize(400,400); show();
 
 }
 
-\...\...\...\...\...\.....
+....
 
 }
 
 The CyberVRML97 supports the following nodes in the current release.
 
-  ------------------------- -------------------------------------------
-  Anchor (\*1)              Fog PositionInterpolator
-  Appearance                Group ProximitySensor
-  Background (\*2)          ImageTexture ScalarInterpolator
-  Billboard                 IndexedFaceSet Script
-  Box                       IndexedLineSet Shape
-  Collision ^(\*3)^         Inline Sphere
-  Color                     LOD SpotLight
-  ColorInterpolator         Material Switch
-  Cone                      Normal Text
-  Coordinate                NormalInterpolator TextureCoordinate
-  CoordinateInterpolator    OrientationInterpolator TextureTransform
-  Cylinder                  PixelTexture TimeSensor
-  DirectionalLight          PointLight Transform
-  ElevationGrid             PointSet Viewpoint
-  Extrusion                 
-  ------------------------- -------------------------------------------
+- Anchor (*1)               
+- Appearance                 
+- Background (*2)           
+- Billboard                  
+- Box                        
+- Collision (*3)          
+- Color                      
+- ColorInterpolator          
+- Cone                       
+- Coordinate                 
+- CoordinateInterpolator     
+- Cylinder                   
+- DirectionalLight           
+- ElevationGrid              
+- Extrusion    
+- Fog             
+- Group
+- ProximitySensor
+- ImageTexture
+- ScalarInterpolator
+- IndexedFaceSet
+- IndexedLineSet
+- Inline
+- LOD
+- Material
+- Script
+- Shape
+- Sphere
+- SpotLight
+- Switch
+- Text
+- Normal
+- NormalInterpolator
+- TextureCoordinate
+- OrientationInterpolator
+- PixelTexture
+- PointLight
+- PointSet
+- TextureTransform
+- Transform
+- TimeSensor
+- Viewpoint
 
-\*1) Not support the URL field jump, \*2) Support only the first
-skyColor, \*3) Not support the collision detecting.
+*1) Not support the URL field jump
+*2) Support only the first skyColor
+*3) Not support the collision detecting
 
 There are two ways to execute the behaviors. If you want to execute the
 behaviors as background tasks (threads), you should use
@@ -566,26 +580,26 @@ The CyberVRML97 supplies some file loader classes for Java3D to load the
 following file format. The loader classes implements
 "com.sun.j3d.loaders".
 
-  ------------------------- ---------------------------------
-  File Format               Loader Class (cv97.j3d.loader)
-  VRML2.0/97 (\*.wrl)       VRML97Loader.
-  Autodesk 3DS (\*.3ds)     A3DSLoader
-  Autodesk DXF (\*dxf)      DXFLoader
-  Wavefront OBJ (\*.obj)    OBJLoader
-  SENSE8 NFF (\*.nff)       NFFLoader
-  STL (\*.stl)              STLLoader
-  ------------------------- ---------------------------------
+------------------------- ---------------------------------
+| File Format           | Loader Class (cv97.j3d.loader) |
+|-----------------------|--------------------------------|
+| VRML2.0/97 (*.wrl)    | VRML97Loader                   |
+| Autodesk 3DS (*.3ds)  | A3DSLoader                     |
+| Autodesk DXF (*dxf)   | DXFLoader                      |
+| Wavefront OBJ (*.obj) | OBJLoader                      |
+| SENSE8 NFF (*.nff)    | NFFLoader                      |
+| STL (*.stl)           | STLLoader                      |
+------------------------- ---------------------------------
 
 The following example loads an OBJ file using the OBJLoader class, and
 gets the scene group.
 
-import cv97.j3d.loader.\*; \...\...\...\...\...\.....
-
+```
+import cv97.j3d.loader.*; ....
 OBJLoader objLoader = new OBJLoader();
-
 Scene s = objLoader.load(filename);
-
 SceneGroup sgGroup = scene.getSceneGroup();
+```
 
 The constructors have no parameter, but you can set a parameter of
 Canvas3D to the constructor of the VRML97Loader if you want to load
@@ -619,41 +633,53 @@ nodes into Java3D nodes.
   IndexedFaceSet (IndexedTriangleArray)    Transform (Transform)
   ---------------------------------------- ---------------------------------------
 
-## []{#anchor-29}File Saver 
+## File Saver 
 
 The CyberVRML97 can export a scene graph of Java3D to a VRML97 file
 using the VRMLSaver class. The following example exports a BranchGroup
 of Java3D into a VRML97 file.
 
-import cv97.j3d.\*;
+```
+import cv97.j3d.*;
+....
 
-\...\...\...\...\...\.....
-
-BranchGroup j3dBranchGroup = \...\.... VRML97Saver saver = new
-VRML97Saver(); saver.setBranchGroup(j3dBranchGroup);
+BranchGroup j3dBranchGroup = VRML97Saver saver = new VRML97Saver();
+saver.setBranchGroup(j3dBranchGroup);
 saver.save("j3dworld.wrl");
+```
 
 The VRML97Saver in the current release exports the following Java3D
 nodes into the VRML97 nodes.
 
-  ---------------------------------------- --------------------------------------
-  AmbientLight (PointLight)                PointLight (PointLight)
-  Appearance (Appearance)                  PointArray (PointSet)
-  Background (Background)                  Shape3D (Shape)
-  Billboard (Billboard)                    SpotLight (SpotLight)
-  BranchGroup (Group)                      Switch (Switch)
-  DirectionalLight (DirectionalLight)      Text3D (Text)
-  ExponentialFog (Fog)                     Texture2D (PixelTexture)
-  Group (Group)                            TransformGroup (Transform) (\*1)
-  IndexedTriangleArray (IndexedFaceSet)    TriangleArray (IndexedFaceSet)
-  IndexedQuadArray (IndexedFaceSet)        TriangleFanArray (IndexedFaceSet)
-  LineArray (IndexedLiseSet)               TriangleStripArray (IndexedFaceSet)
-  LineStripArray (IndexedLiseSet)          QuadArray (IndexedFaceSet)
-  LinearFog (Fog)                          View (Viewpoint)
-  Material (Material)                      
-  ---------------------------------------- --------------------------------------
+- AmbientLight (PointLight)        
+- Appearance (Appearance)         
+- Background (Background)         
+- Billboard (Billboard)          
+- BranchGroup (Group)           
+- DirectionalLight (DirectionalLight)   
+- ExponentialFog (Fog)           
+- Group (Group)              
+- IndexedTriangleArray (IndexedFaceSet)  
+- IndexedQuadArray (IndexedFaceSet)    
+- LineArray (IndexedLiseSet)        
+- LineStripArray (IndexedLiseSet)    
+- LinearFog (Fog)            
+- Material (Material)           
+- PointLight (PointLight)
+- PointArray (PointSet)
+- Shape3D (Shape)
+- SpotLight (SpotLight)
+- Switch (Switch)
+- Text3D (Text)
+- Texture2D (PixelTexture)
+- TransformGroup (Transform) (*1)
+- TriangleArray (IndexedFaceSet)
+- TriangleFanArray (IndexedFaceSet)
+- TriangleStripArray (IndexedFaceSet)
+- QuadArray (IndexedFaceSet)
+- View (Viewpoint)
 
-> \*1) Not support all matrix information
+*1) Not support all matrix information
 
 # []{#anchor-30}License 
 
@@ -666,3 +692,11 @@ However, If you want to distribute your software using the CyberVRML97,
 you have to add state that \"Portions of this software is based in part
 on the CyberVRML97 package written by Satoshi Konno\" into the program
 or document.
+
+# Document Revision History
+
+| Modified     | Description                                             |
+|--------------|---------------------------------------------------------|
+| June 19 2002 | Added a description of new constructor of VRML97Loader. |
+| April 5 2002 | Added a description of PROTO option for loading.        |
+| March 3 2002 | This was the first release of the User's Guide.         |
