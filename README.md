@@ -1,28 +1,30 @@
 # CyberVRML97 for Java
 
-> User's Guide
-
-## 1.Introduction 
-
 CyberVRML97 for Java is a development package for VRML97/2.0 and Java3D
 programmers. Using the package, you can easily read and write the VRML
 files, set and get the scene graph information, draw the geometries, run
 the behaviors easily.
 
-## 2.Setup 
+![](doc/img/glut_browser.png)
+
+## Setup 
 
 To use the package, copy the package into your JDK and JRE library
 directory. For example,
 
-copy cv97r???.jar C:¥jdk1.x¥jre¥lib¥ext¥ copy cv97r???.jar C:¥Program
-Files¥JavaSoft¥JRE¥1.x¥lib¥ext¥
+```
+copy cv97r???.jar C:¥jdk1.x¥jre¥lib¥ext¥
+copy cv97r???.jar C:¥Program Files¥JavaSoft¥JRE¥1.x¥lib¥ext¥
+```
 
 Otherwise add the package into your CLASSPATH environmental variable.
 For example,
 
+```
 set CLASSPATH=.¥;c:¥src¥java¥cv97r???.jar
+```
 
-###Scene Graph 
+### Scene Graph 
 
 In the CyberVRML97, the scene graph is correction and hierarchical
 arrangement of VRML nodes.
@@ -36,23 +38,27 @@ the scene graph.
 Use SceneGraph::load() to load a scene graph from a VRML file. The
 load() clears all VRML nodes in the current scene graph.
 
-SceneGraph sg = new SceneGraph(); sg.load(\"world.wrl\");
+SceneGraph sg = new SceneGraph(); sg.load("world.wrl");
 
 If your scene graph has some VRML nodes and you want to add a new scene
 graph from a VRML file into the current scene graph, use
 SceneGraph::add().
 
-> SceneGraph sg = new SceneGraph(); ....
-
-sg.add(\"world.wrl\");
+```
+SceneGraph sg = new SceneGraph(); ....
+sg.add("world.wrl");
+```
 
 The CyberVRML97 supports PROTO defines of VRML97 using the preprocessor,
 but the preprocessor is inactive by default. If you want to use the
 preprocessor, use SceneGraph::setOption() with USE_PREPROCESSOR before
 loading. For example,
 
+```
 SceneGraph sg = new SceneGraph();
-sg.setOption(SceneGraph.USE_PREPROCESSOR); sg.load(\"world.wrl\");
+sg.setOption(SceneGraph.USE_PREPROCESSOR);
+sg.load("world.wrl");
+```
 
 ### Building Scene Graph 
 
@@ -64,6 +70,8 @@ a new node as a child node of the other node.
 The following example adds a PointLight and Shape node that has an
 appearance and a geometry node into an empty scene graph.
 
+![](doc/img/scenegraph_01.png)
+```
 SceneGraph sg;
 
 // Add a PointLight node
@@ -74,38 +82,48 @@ PointLightNode plight = new PointLightNode();
 sg.addNode(shape);
 
 // Add an Appearance node as a child node of the Shape node
-Appearancenode app = new AppearanceNode(); shape.addChildNode(app);
+Appearancenode app = new AppearanceNode();
+shape.addChildNode(app);
 
-![](Pictures/10000000000000DB00000096AEEAD10C.jpg){width="5.64cm"
-height="3.853cm"}// Add a Material node as a child node of the
+// Add a Material node as a child node of the
 Appearance node MaterialNode mat = new MaterialNode();
 mat.setDiffuseColor(1.0f, 0.0f, 0.0f); // Red app.addChildNode(mat);
 
-// Add a Sphere node as a child node of the Shape node SphereNode sphere
-= new SphereNode(); shape.addChildNode(sphere); sphere.setRadius(10.0f);
+// Add a Sphere node as a child node of the Shape node 
+SphereNode sphere = new SphereNode();
+shape.addChildNode(sphere);
+sphere.setRadius(10.0f);
+```
 
 Use Node::remove() to remove a node from the current scene graph. The
 following example uses Node::remove() to remove a PointLight node from a
 loaded scene graph.
 
-SceneGraph sg; sg.load(\"world.wrl\");
+```
+SceneGraph sg; 
+sg.load("world.wrl");
 
 // Remove first PointLight node
 
 PointLightNode plight = sg.findPointLightNode(); if (plight != null)
-
 plight.remove();
+```
+
 
 ### Scene Graph Output 
 
 Use SceneGraph::save() to save a current scene graph into a VRML file.
 
-sceneGraph.save(\"newworld.wrl\");
+```
+sceneGraph.save("newworld.wrl");
+```
 
 Use SceneGraph::print() to output a current scene graph into a default
 console.
 
+```
 sceneGraph.print();
+```
 
 ### Scene Graph Traversal 
 
@@ -117,34 +135,29 @@ The first way is to use SceneGraph::getNodes() with Node::next() and
 Node::getChildNodes(). For example, if you want to get all viewpoint
 nodes in a scene graph .....
 
-void GetViewpointInfomation(Node node)
+```
+void GetViewpointInfomation(Node node) {
 
-{
+    if (node.isViewpointNode()) {
+        ViewpointNode view = (Viewpoint)node; // Get a viewpoint information
+        ....
 
-if (node.isViewpointNode()) {
+    }
 
-ViewpointNode view = (Viewpoint)node; // Get a viewpoint information
-....
+    for (Node cnode=node.getChildNodes(); cnode; cnode=cnode.next())
+        GetViewpointInfomation(cnode);
+    }
 
+void main() {
+    ....
+    SceneGraph sg = new SceneGraph(); 
+    sceneGraph.load("world.wrl");
+    for (Node node=sg.getNodes(); node; node=node.next()) {
+        GetViewpointInfomation(node);
+    }
+    ....
 }
-
-for (Node cnode=node.getChildNodes(); cnode; cnode=cnode.next())
-GetViewpointInfomation(cnode);
-
-}
-
-void main()
-
-{
-
-....
-
-SceneGraph sg = new SceneGraph(); sceneGraph.load(\"world.wrl\");
-
-for (Node node=sg.getNodes(); node; node=node.next())
-GetViewpointInfomation(node); ....
-
-}
+```
 
 SceneGraph::getNodes() returns a first node that are added into the
 scene graph root. Node::next() returns a next node in the same
@@ -152,55 +165,48 @@ hierarchy, Node::getChildNodes() returns a first child node that are
 added into the parent node. The methods returns null if the next node
 does not exist.
 
-![](Pictures/10000000000000ED000000B0A165EDDF.jpg){width="6.097cm"
-height="4.53cm"}
+![](doc/img/scenegraph_02.png)
+
 
 The other way is to use SceneGraph::getNodes()with
 Node::nextTraversal(). The way is handier than the first one. For
 example, if you want to get all viewpoint nodes in the scene graph
-\.....
 
-void main()
-
-{
-
-....
-
-SceneGraph sg = new SceneGraph(); sg.load(\"world.wrl\"); for (Node
-node=sg.getNodes(); node; node=node.nextTraversal()) if
-(node.isViewpoint()) {
-
-ViewpointNode view = (ViewpointNode)node; // Get a viewpoint information
-....
-
+```
+void main() {
+    ....
+    SceneGraph sg = new SceneGraph();
+    sg.load("world.wrl");
+    for (Node node=sg.getNodes(); node; node=node.nextTraversal()) {
+        if (node.isViewpoint()) {
+            ViewpointNode view = (ViewpointNode)node; // Get a viewpoint information
+            ....
+        }
+    }
+    ....
 }
-
-}
-
-....
-
-}
+```
 
 Node::nextTraversal() is similar to Node::next(), but
 Node::nextTraversal tries to get a next node from the parent node when
 the next node does not exist. This Node::nextTraversal() is overridden
 in the sub classes, too.
 
-![](Pictures/10000000000000E4000000B093530EF3.jpg){width="5.873cm"
-height="4.534cm"}
+![](doc/img/scenegraph_03.png)
 
 If you want to get only same type nodes, use
-SceneGraph::find\<nodetype\>Node() instead of SceneGraph::getNodes()
+SceneGraph::find<nodetype>Node() instead of SceneGraph::getNodes()
 with Node:: nextTraversalSameType() that returns a next same class node.
 For example, if you want to get only all viewpoint nodes in the scene
-graph \.....
+graph
 
-SceneGraph sg = new SceneGraph(); sg.load(\"world.wrl\"); for
-(ViewpointNode view=sg.findViewpointNode(); view;
-view=(ViewpointNode)view.nextTraversalSameType())) { // Get a viewpoint
-information ....
-
+```
+SceneGraph sg = new SceneGraph();
+sg.load("world.wrl");
+for (ViewpointNode view=sg.findViewpointNode(); view; view=(ViewpointNode)view.nextTraversalSameType())) { 
+  // Get a viewpoint information ....
 }
+```
 
 ### Finding Node 
 
@@ -208,18 +214,20 @@ Use SceneGraph::findNode() to find a named node by DEF keyword or
 Node::setName(). The following example loads a VRML file, "world.wrl",
 and gets a node that is named as "MountFuji".
 
+```
 SceneGraph sg; sg.load("world.wrl")
-
 Node node = sg.findNode("MountFuji");
+```
 
-Use SceneGrahp::get\<nodetype\>Nodes() to get a specified first node
+Use SceneGrahp::get<nodetype>Nodes() to get a specified first node
 from the root hierarchy. For example, you want to get a viewpoint that
 is a first viewpoint node in the scene graph root, use
 SceneGraph::getViewpointNodes();
 
+```
 SceneGraph sg; sg.load("world.wrl")
-
 ViewpointNode defaultView = sg.getViewpointNodes();
+```
 
 ## Node 
 
@@ -238,22 +246,22 @@ SphereNode spNode = new SphereNode(); spNode.setRadius(10.0);
 ### Node Type 
 
 If you want to know the node type, use Node::getType() or
-Node::is\<nodetype\>Node();
+Node::is<nodetype>Node();
 
 Node::getType() returns the node type as a string,
-Node::is\<nodetype\>Node() returns true when the node is the specified
+Node::is<nodetype>Node() returns true when the node is the specified
 type. For example, you want to know whether a node is ViewpointNode.
 
-SceneGraph sg = new SceneGraph(); sg.load(\"world.wrl\");
-
-for (Node node=sg.getNodes(); node; node=node.nextTraversal()) String
-nodeType = node.getType();
-
-if (node.isViewpoint() \|\| nodeType.equals("Viewpoint\") == 0)
-
-System.out.println("This node is ViewpointNode !!");
-
+```
+SceneGraph sg = new SceneGraph();
+sg.load("world.wrl");
+for (Node node=sg.getNodes(); node; node=node.nextTraversal()) {
+    String nodeType = node.getType();
+    if (node.isViewpoint() \|\| nodeType.equals("Viewpoint") == 0) {
+        System.out.println("This node is ViewpointNode !!");
+    }
 }
+```
 
 ### Node Name 
 
@@ -261,51 +269,61 @@ If you load a VRML file that has some named nodes by DEF keyword, you
 can get the name using Node::getName(); Use Node::setName() to name a
 node.
 
+```
 SceneGraph sg; sg.load("world.wrl")
-
-ShapeNode mtNode = sg.getShapeNodes(); mtNode.setName("MtFuji");
+ShapeNode mtNode = sg.getShapeNodes();
+mtNode.setName("MtFuji");
+```
 
 The named nodes are output using DEF keyword when you save the scene
 graph.
 
-#VRML V2.0 utf8 .... DEF MtFuji Shape { ....
-
+```
+#VRML V2.0 utf8
+ ....
+ DEF MtFuji Shape {
+  ....
 }
-
 ....
+```
 
 ## []{#anchor-12}Accessing Fields 
 
-The node class has set\<fieldname\>() and get\<fieldname\>() to access
-to the VRML fields, and has getN\<fieldname\>s() if the field is multi
+The node class has set<fieldname>() and get<fieldname>() to access
+to the VRML fields, and has getN<fieldname>s() if the field is multi
 field, MFString etc.. For example, the AnchorNode class has the
 following methods.
 
+
+```
 class AnchorNode {
-
-void setDescription(String value); String getDescription(); void
-addParameter(String value); int getNParameters();
-
-String getParameter(int index); void addUrl(String value); int
-getNUrls();
-
-String getUrl(int index); void setUrl(int index, String urlString);
-
+    void setDescription(String value);
+    String getDescription(); 
+    void addParameter(String value);
+    int getNParameters();
+    String getParameter(int index);
+    void addUrl(String value);
+    int getNUrls();
+    String getUrl(int index);
+    void setUrl(int index, String urlString);
 };
+```
 
 The Node classes has only basic field access methods. Use
-get\<fieldname\>Field() to access the field in more detail. The method
+get<fieldname>Field() to access the field in more detail. The method
 returns the field class itself. You can operate the field in more detail
 to the field class. The following example gets a color field of a Color
 Node in an IndexedFaceSet node, and changes all the colors to red.
 
+```
 IndexedFaceSetNode idxNode = ......
-
-ColorNode colNode = idxNode.getColorNodes(); MFColor colField =
-colNode.getColorField(); int colCnt = colField.size(); for (int n=0;
-n\<colCnt; n++)
-
-colField.set1Value(n, 0xff, 0x00, 0x00) // Red
+ColorNode colNode = idxNode.getColorNodes();
+MFColor colField = colNode.getColorField();
+int colCnt = colField.size();
+for (int n=0;n<colCnt; n++) {
+    colField.set1Value(n, 0xff, 0x00, 0x00) // Red
+}
+```
 
 ### Adding to Scene Graph 
 
@@ -313,9 +331,10 @@ Use SceneGraph::addNode() to add the node as a root node of the scene
 graph. The following example creates a transform node add the node to
 the scene graph root.
 
+```
 SceneGraph sg;
-
 TransformNode transNode = new TransformNode(); sg.addNode(transNode);
+```
 
 ### Adding Child Node 
 
@@ -323,12 +342,13 @@ Use Node::addChildNode() to add the node as a child node of the other
 node. The following example creates a shape and a box, add the shape to
 the scene graph root, and add the box to the shape.
 
+```
 SceneGraph sg;
-
-ShapeNode shapeNode = new ShapeNode(); BoxNode boxNode = new BoxNode();
+ShapeNode shapeNode = new ShapeNode();
+BoxNode boxNode = new BoxNode();
 sg.addNode(shapeNode);
-
 shapeNode.addChileNode(boxNode);
+```
 
 ### Getting Child Node 
 
@@ -337,17 +357,16 @@ Node::getNChildNodes() that returns a count of child nodes, and
 Node::getChileNode() that returns a selected child node. The following
 example shows the name and the type of all child nodes.
 
-void PrintChildNodes(Node node)
-
-{ int childNodeCnt = node.getNChildNodes(); for (int n=0;
-n\<childNodeCnt; n++) { Node childNode = node.getChildNode(n); char
-nodeType = childNode.getType(); char nodeName = childNode.getName();
-
-System.out.println("\[" + n + "\] = " + nodeType + ", " + nodeName);
-
+```
+void PrintChildNodes(Node node) {
+    int childNodeCnt = node.getNChildNodes(); for (int n=0; n<childNodeCnt; n++) {
+        Node childNode = node.getChildNode(n);
+        char nodeType = childNode.getType();
+        char nodeName = childNode.getName();
+        System.out.println("\[" + n + "\] = " + nodeType + ", " + nodeName);
+    }
 }
-
-}
+```
 
 The other way is to use Node::getChildNodes() that returns a first child
 node with Node::next() returns a next child node in the same parent
@@ -355,20 +374,16 @@ node. The Node::getChildNodes() and the Node::next() returns NULL if the
 node does not exist. The way is handier and faster than the first one.
 The following example shows the name and the type of all child nodes.
 
-void PrintChildNodes(Node node)
-
-{
-
-Node childNode = node.getChildNodes(); while (childNode!= NULL) {
-
-String nodeType = childNode.getType();
-
-String nodeName = childNode.getName();
-
-System.out.println("\[" + n + "\] = " + nodeType + ", " + nodeName);
-childNode = childNode.next();
-
-} }
+```
+void PrintChildNodes(Node node) {
+    Node childNode = node.getChildNodes(); while (childNode!= NULL) {
+        String nodeType = childNode.getType();
+        String nodeName = childNode.getName();
+        System.out.println("\[" + n + "\] = " + nodeType + ", " + nodeName);
+        childNode = childNode.next();  
+    }
+}
+```
 
 ### Removing from SceneGraph or Parent Node. 
 
@@ -389,7 +404,7 @@ Node::createInstanceNode() to create the instance node.
 
 SceneGraph sg;
 
-ShapeNode shape = new ShapeNode(); shape.setName(\"BOX\"); BoxNode box =
+ShapeNode shape = new ShapeNode(); shape.setName("BOX"); BoxNode box =
 new BoxNode(); box.setSize(10.0, 20.0, 30.0); sg.addNode(shape);
 shape.addChildNode(box);
 
@@ -413,7 +428,7 @@ The node has several fields and the field is a property or attribute of
 a node. The field is identical to the VRML field name. For example, you
 would use the SFBool class if you want to use the SFBool field.
 
-Use get\<fieldname\>Field() to get the field. The following example gets
+Use get<fieldname>Field() to get the field. The following example gets
 a color field of a Color Node in an IndexedFaceSet node, and changes all
 the colors to red.
 
@@ -421,7 +436,7 @@ IndexedFaceSetNode idxNode = ......
 
 ColorNode colNode = idxNode.getColorNodes(); MFColor colField =
 colNode.getColorField(); int colCnt = colField.size(); for (int n=0;
-n\<colCnt; n++)
+n<colCnt; n++)
 
 colField.set1Value(n, 0xff, 0x00, 0x00) // Red
 
@@ -497,21 +512,23 @@ VRML browser with Java3D easily. To use the feature, you have to create
 an instance of vrml.j3d.SceneGraphJ3dObject class with a target
 Canvas3D, and set the instance to the scene graph. For example,
 
-public class ViewerJ3D extends Frame implements Constants { private
-Scene Graph sg; private SceneGraphJ3dObject sgObject; public
-ViewerJ3D(){ super(\"VRML Simple Viewer\"); ....
-sg = new SceneGraph(SceneGraph.NORMAL_GENERATION); setLayout(new
-BorderLayout()); Canvas3D c = new Canvas3D(null); add(\"Center\", c);
-sgObject = new SceneGraphJ3dObject(c, sg); sg.setObject(sgObject);
-....
-
-setSize(400,400); show();
-
+```
+public class ViewerJ3D extends Frame implements Constants { 
+    private Scene Graph sg;
+    private SceneGraphJ3dObject sgObject;
+    public ViewerJ3D(){ 
+        super("VRML Simple Viewer");
+        ....
+        sg = new SceneGraph(SceneGraph.NORMAL_GENERATION); 
+        setLayout(newBorderLayout()); 
+        Canvas3D c = new Canvas3D(null); add("Center", c);
+        sgObject = new SceneGraphJ3dObject(c, sg); sg.setObject(sgObject);
+        ....
+        setSize(400,400); show();
+    }
+    .... 
 }
-
-....
-
-}
+```
 
 The CyberVRML97 supports the following nodes in the current release.
 
@@ -570,11 +587,11 @@ should use SceneGraph::update(). The SceneGraph::update() executes the
 behaviors at once. The following example executes execute the behavior
 as the background tasks.
 
-Scene Graph sg = new Scene Graph(); sg.load(\"world.wrl\");
+Scene Graph sg = new Scene Graph(); sg.load("world.wrl");
 
 sg.startSimulation();
 
-## []{#anchor-28}File Loader 
+## File Loader 
 
 The CyberVRML97 supplies some file loader classes for Java3D to load the
 following file format. The loader classes implements
@@ -605,33 +622,48 @@ The constructors have no parameter, but you can set a parameter of
 Canvas3D to the constructor of the VRML97Loader if you want to load
 images files of ImageTextureNode.
 
+```
 Canvas3D c3d = ......
-
 VRML97Loader wrlLoader = new VRML97Loader(c3d);
-
 Scene s = wrlLoader.load(filename);
+```
 
 The VRML97Loader in the current release converts the following VRML97
 nodes into Java3D nodes.
 
-  ---------------------------------------- ---------------------------------------
-  Anchor (Group)                           IndexedLineSet (IndexedLineArray)
-  Appearance (Appearance)                  Inline
-  Billboard (TransformGroup)               LOD (Switch)
-  Box (QuadArray)                          Material (Material)
-  Collision (Group)                        Normal
-  Color                                    PixelTexture (Texture2D)
-  Cone (TriangleArray)                     PointLight (PointLight)
-  Coordinate                               PointSet (IndexedPointArray)
-  Cylinder (TriangleArray)                 Shape (Shape3D)
-  DirectionalLight (DirectionalLight)      Sphere (TriangleArray)
-  ElevationGrid (IndexedTriangleArray)     SpotLight (SpotLight)
-  Extrusion (IndexedTriangleArray)         Switch (Switch)
-  Fog (ExponentialFog or LinerFog)         Text (Text3D)
-  Group (Group)                            TextureCoordinate
-  ImageTexture (Texture2D)                 TextureTransform (TextureAttributes)
-  IndexedFaceSet (IndexedTriangleArray)    Transform (Transform)
-  ---------------------------------------- ---------------------------------------
+
+- Anchor (Group)                           
+- Appearance (Appearance)                  
+- Billboard (TransformGroup)               
+- Box (QuadArray)                          
+- Collision (Group)                        
+- Color                                   
+- Cone (TriangleArray)                     
+- Coordinate                               
+- Cylinder (TriangleArray)                 
+- DirectionalLight (DirectionalLight)      
+- ElevationGrid (IndexedTriangleArray)     
+- Extrusion (IndexedTriangleArray)         
+- Fog (ExponentialFog or LinerFog)         
+- Group (Group)                            
+- ImageTexture (Texture2D)                 
+- IndexedFaceSet (IndexedTriangleArray)   
+- IndexedLineSet (IndexedLineArray)
+- Inline
+- LOD (Switch)
+- Material (Material)
+- Normal
+- PixelTexture (Texture2D)
+- PointLight (PointLight)
+- PointSet (IndexedPointArray)
+- Shape (Shape3D)
+- Sphere (TriangleArray)
+- SpotLight (SpotLight)
+- Switch (Switch)
+- Text (Text3D)
+- TextureCoordinate
+- TextureTransform (TextureAttributes)
+- Transform (Transform)
 
 ## File Saver 
 
@@ -681,19 +713,19 @@ nodes into the VRML97 nodes.
 
 *1) Not support all matrix information
 
-# []{#anchor-30}License 
+## License 
 
-CyberVRML97 for Java is provided \"AS IS\". Licenser disclaims all
+CyberVRML97 for Java is provided "AS IS". Licenser disclaims all
 warranties, including but not limited to, all express or implied
 warranties of merchant ability and fitness for a particular purpose.
 
 Everyone can use the CyberVRML97 for commerce or personal purposes free.
 However, If you want to distribute your software using the CyberVRML97,
-you have to add state that \"Portions of this software is based in part
-on the CyberVRML97 package written by Satoshi Konno\" into the program
+you have to add state that "Portions of this software is based in part
+on the CyberVRML97 package written by Satoshi Konno" into the program
 or document.
 
-# Document Revision History
+## Document Revision History
 
 | Modified     | Description                                             |
 |--------------|---------------------------------------------------------|
